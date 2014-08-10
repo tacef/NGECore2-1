@@ -34,6 +34,7 @@ import resources.datatables.ClientPOIRadius;
 import services.playercities.ClientRegion;
 import engine.clientdata.ClientFileManager;
 import engine.clientdata.visitors.DatatableVisitor;
+import engine.resources.common.CRC;
 import engine.resources.config.Config;
 import engine.resources.objects.SWGObject;
 import engine.resources.scene.Planet;
@@ -168,6 +169,16 @@ public class TerrainService {
 		return null;
 	}
 	
+	public Planet getPlanetByCrc(int crc) {
+		for (int i = 0; i < planets.size(); i++) {
+			if (CRC.StringtoCRC(planets.get(i).getName().toLowerCase()) == crc) {
+				return planets.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
 	public Planet getPlanetByPath(String path) {
 		for (int i = 0; i < planets.size(); i++) {
 			if (planets.get(i).getPath().equals(path)) {
@@ -212,16 +223,16 @@ public class TerrainService {
 					}
 					
 					if (loaded && config.getInt("LOAD.BUILDOUT_OBJECTS") > 0) {
-						if (!core.getExcludedDevelopers().contains(System.getProperty("user.name"))){
+						if (!core.getExcludedDevelopers().contains(System.getProperty("user.name"))){								
 							if (! config.keyExists("LOAD.BUILDOUT_ONLY_FOR")){
 								try {							
 									core.objectService.loadBuildoutObjects(planet);
 								} catch (InstantiationException | IllegalAccessException e) {
 									e.printStackTrace();
 								}
-							} else {
-								if (planet.getName().equals(config.getString("LOAD.BUILDOUT_ONLY_FOR"))){
-									try {							
+							} else {								
+								if (planet.getName().trim().equals(config.getString("LOAD.BUILDOUT_ONLY_FOR").trim())){
+									try {		
 										core.objectService.loadBuildoutObjects(planet);
 									} catch (InstantiationException | IllegalAccessException e) {
 										e.printStackTrace();
