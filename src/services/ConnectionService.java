@@ -137,6 +137,7 @@ public class ConnectionService implements INetworkDispatch {
 		            if (resultSet.next()) {
 		            	client.setAccountId(resultSet.getLong("accountId"));
 		            	client.setSessionKey(clientIdMsg.getSessionKey());
+		            	client.setGM(core.loginService.checkForGmPermission((int) resultSet.getLong("accountId")));
 		            	AccountFeatureBits accountFeatureBits = new AccountFeatureBits();
 		            	ClientPermissionsMessage clientPermissionsMessage = new ClientPermissionsMessage(maxNumberOfCharacters - core.characterService.getNumberOfCharacters((int) resultSet.getLong("accountId")));
 		            	session.write(new HeartBeatMessage().serialize());
@@ -339,6 +340,7 @@ public class ConnectionService implements INetworkDispatch {
 		}
 		
 		ghost.toggleFlag(PlayerFlags.LD);
+		
 		object.setPerformanceListenee(null);
 		object.setPerformanceWatchee(null);
 		object.setAttachment("disconnectTask", null);

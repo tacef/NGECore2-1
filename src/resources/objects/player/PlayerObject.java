@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.mina.core.buffer.IoBuffer;
 
 import resources.craft.DraftSchematic;
-import resources.datatables.AdminTag;
 import resources.datatables.Citizenship;
 import resources.datatables.Professions;
 import resources.gcw.RegionDefender;
@@ -46,8 +45,6 @@ import resources.objects.resource.ResourceContainerObject;
 import resources.objects.waypoint.WaypointObject;
 import resources.quest.Quest;
 import engine.clients.Client;
-import engine.resources.common.CRC;
-import engine.resources.common.StringUtilities;
 import engine.resources.objects.Baseline;
 import engine.resources.scene.Planet;
 import engine.resources.scene.Point3D;
@@ -133,7 +130,7 @@ public class PlayerObject extends IntangibleObject implements Serializable {
 	@Override
 	public Baseline getBaseline6() {
 		Baseline baseline = super.getBaseline6();
-		baseline.put("adminTag", (byte) AdminTag.NONE);
+		baseline.put("godLevel", (byte) 0);
 		baseline.put("currentRank", 0);
 		baseline.put("rankProgress", (float) 0);
 		baseline.put("highestRebelRank", 0);
@@ -160,8 +157,8 @@ public class PlayerObject extends IntangibleObject implements Serializable {
 		baseline.put("maxForcePower", 100);
 		baseline.put("currentFSQuestList", new SWGList<Byte>(this, 8, 4, false));
 		baseline.put("completedFSQuestList", new SWGList<Byte>(this, 8, 5, false));
-		baseline.put("activeQuest", 0);
-		baseline.put("questJournal", new SWGList<Quest>(this, 8, 7, false));
+		baseline.put("questJournal", new SWGList<Quest>(this, 8, 6, false));
+		baseline.put("7", 0);
 		baseline.put("professionWheelPosition", "");
 		return baseline;
 	}
@@ -438,12 +435,12 @@ public class PlayerObject extends IntangibleObject implements Serializable {
 		notifyClients(getBaseline(3).set("showBackpack", showBackpack), true);
 	}
 	
-	public byte getAdminTagValue() {
-		return (byte) getBaseline(6).get("adminTag");
+	public byte getGodLevel() {
+		return (byte) getBaseline(6).get("godLevel");
 	}
 	
-	public void setAdminTagValue(byte adminTag) {
-		notifyClients(getBaseline(6).set("adminTag", (byte) adminTag), true);
+	public void setGodLevel(int godLevel) {
+		notifyClients(getBaseline(6).set("godLevel", (byte) godLevel), true);
 	}
 	
 	public int getCurrentRank() {
@@ -595,13 +592,6 @@ public class PlayerObject extends IntangibleObject implements Serializable {
 		return (SWGList<Quest>) getBaseline(8).get("questJournal");
 	}
 	
-	public int getActiveQuest() {
-		return (int) getBaseline(8).get("activeQuest");
-	}
-	
-	public void setActiveQuest(String quest) {
-		getBaseline(8).set("activeQuest", CRC.StringtoCRC("quest/"+quest));
-	}
 	public String getProfessionWheelPosition() {
 		return (String) getBaseline(8).get("professionWheelPosition");
 	}
@@ -1029,7 +1019,6 @@ public class PlayerObject extends IntangibleObject implements Serializable {
 	
 	@Override
 	public void sendListDelta(byte viewType, short updateType, IoBuffer buffer) {
-
 		switch (viewType) {
 			case 3:
 			case 6:

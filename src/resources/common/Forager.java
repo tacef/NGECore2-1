@@ -180,7 +180,7 @@ public class Forager {
 			}
 			
 			// chosenObject = 5; // To test TMs
-			if(!(NGECore.getInstance().adminService.getAccessLevelFromDB(forager.getClient().getAccountId()) == null)) // Always yield a TM for testing
+			if(forager.getClient().isGM()) // Always yield a TM for testing
 				chosenObject = 5;
 			
 			//forager.sendSystemMessage("chosenObject " + chosenObject,(byte) 0);
