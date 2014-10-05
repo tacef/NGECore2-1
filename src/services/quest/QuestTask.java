@@ -21,6 +21,8 @@
  ******************************************************************************/
 package services.quest;
 
+import java.util.concurrent.ScheduledFuture;
+
 public class QuestTask {
 	private String type; // Tells the server what to do when they get the task
 	private String name;
@@ -32,6 +34,7 @@ public class QuestTask {
 	private String musicOnActivate;
 	private String musicOnComplete;
 	private String musicOnFail;
+	private String buffName;
 	private String target;
 	private String parameter; // TODO: What does this do?
 	private String grantQuestOnComplete;
@@ -47,6 +50,9 @@ public class QuestTask {
 	private String waitMarkerCellName;
 	private String commMessageText;
 	private String npcAppearanceTemplate; // NPC Appearance Server Template
+	private String creatureType;
+	private String relativeOffsetX;
+	private String relativeOffsetY;
 	private String tasksOnComplete;
 	private String serverTemplate;
 	private String itemName;
@@ -56,7 +62,11 @@ public class QuestTask {
 	private String msgBoxTitle;
 	private String msgBoxSound;
 	private String lootName;
+	private String itemToGive;
 	
+	private boolean createItem;
+	private boolean destroyItem;
+	private boolean dismountPlayer;
 	private boolean visible;
 	private boolean grantQuestOnCompleteShowSystemMessage;
 	private boolean grantQuestOnFailShowSystemMessage;
@@ -74,7 +84,19 @@ public class QuestTask {
 	private int msgBoxWidth;
 	private int msgBoxHeight;
 	private int msgBoxLength;
-	
+	private int minStartDelay;
+	private int maxStartDelay;
+	private int timerAmount;
+	private int chanceToActivate;
+	private int chanceToSkip;
+	private int numToGive;
+	private int count;
+	private int minCount;
+	private int maxCount;
+	private int minDistance;
+	private int maxDistance;
+	private int questControlOnTaskCompletion;
+
 	private long waitMarkerBuilding;
 	
 	private float LocationX;
@@ -84,7 +106,9 @@ public class QuestTask {
 	private float waitMarkerY;
 	private float waitMarkerZ;
 	private float radius;
-
+	
+	private transient ScheduledFuture<?> scheduledTask;
+	
 	public QuestTask() {}
 
 	public QuestTask(String type, int id) {
@@ -160,6 +184,14 @@ public class QuestTask {
 		this.musicOnFail = musicOnFail;
 	}
 
+	public int getChanceToActivate() {
+		return chanceToActivate;
+	}
+
+	public void setChanceToActivate(int chanceToActivate) {
+		this.chanceToActivate = chanceToActivate;
+	}
+	
 	public String getTarget() {
 		return target;
 	}
@@ -280,6 +312,54 @@ public class QuestTask {
 		this.npcAppearanceTemplate = npcAppearanceTemplate;
 	}
 
+	public String getCreatureType() {
+		return creatureType;
+	}
+
+	public void setCreatureType(String creatureType) {
+		this.creatureType = creatureType;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public int getMinDistance() {
+		return minDistance;
+	}
+
+	public void setMinDistance(int minDistance) {
+		this.minDistance = minDistance;
+	}
+
+	public int getMaxDistance() {
+		return maxDistance;
+	}
+
+	public void setMaxDistance(int maxDistance) {
+		this.maxDistance = maxDistance;
+	}
+
+	public String getRelativeOffsetX() {
+		return relativeOffsetX;
+	}
+
+	public void setRelativeOffsetX(String relativeOffsetX) {
+		this.relativeOffsetX = relativeOffsetX;
+	}
+
+	public String getRelativeOffsetY() {
+		return relativeOffsetY;
+	}
+
+	public void setRelativeOffsetY(String relativeOffsetY) {
+		this.relativeOffsetY = relativeOffsetY;
+	}
+	
 	public boolean isVisible() {
 		return visible;
 	}
@@ -540,5 +620,118 @@ public class QuestTask {
 
 	public void setLootName(String lootName) {
 		this.lootName = lootName;
+	}
+	
+	public int getTimerAmount() {
+		return timerAmount;
+	}
+
+	public void setTimerAmount(int timerAmount) {
+		this.timerAmount = timerAmount;
+	}
+
+	public String getBuffName() {
+		return buffName;
+	}
+
+	public void setBuffName(String buffName) {
+		this.buffName = buffName;
+	}
+
+	public int getChanceToSkip() {
+		return chanceToSkip;
+	}
+
+	public void setChanceToSkip(int chanceToSkip) {
+		this.chanceToSkip = chanceToSkip;
+	}
+	
+	public int getMinCount() {
+		return minCount;
+	}
+
+	public void setMinCount(int minCount) {
+		this.minCount = minCount;
+	}
+
+	public int getMaxCount() {
+		return maxCount;
+	}
+
+	public void setMaxCount(int maxCount) {
+		this.maxCount = maxCount;
+	}
+	
+	public String getItemToGive() {
+		return itemToGive;
+	}
+
+	public void setItemToGive(String itemToGive) {
+		this.itemToGive = itemToGive;
+	}
+
+	
+	public int getMinStartDelay() {
+		return minStartDelay;
+	}
+
+	public void setMinStartDelay(int minStartDelay) {
+		this.minStartDelay = minStartDelay;
+	}
+
+	public int getMaxStartDelay() {
+		return maxStartDelay;
+	}
+
+	public void setMaxStartDelay(int maxStartDelay) {
+		this.maxStartDelay = maxStartDelay;
+	}
+	
+	public boolean dismountsPlayer() {
+		return dismountPlayer;
+	}
+
+	public void setDismountPlayer(boolean dismountPlayer) {
+		this.dismountPlayer = dismountPlayer;
+	}
+
+	public ScheduledFuture<?> getScheduledTask() {
+		return scheduledTask;
+	}
+
+	public void setScheduledTask(ScheduledFuture<?> scheduledTask) {
+		this.scheduledTask = scheduledTask;
+	}
+
+	public int getNumToGive() {
+		return numToGive;
+	}
+
+	public void setNumToGive(int numToGive) {
+		this.numToGive = numToGive;
+	}
+
+	public boolean isCreateItem() {
+		return createItem;
+	}
+
+	public void setCreateItem(boolean createItem) {
+		this.createItem = createItem;
+	}
+
+	public boolean isDestroyItem() {
+		return destroyItem;
+	}
+
+	public void setDestroyItem(boolean destroyItem) {
+		this.destroyItem = destroyItem;
+	}
+	
+	public int getQuestControlOnTaskCompletion() {
+		return questControlOnTaskCompletion;
+	}
+
+	public void setQuestControlOnTaskCompletion(int questControlOnTaskCompletion) {
+		this.questControlOnTaskCompletion = questControlOnTaskCompletion;
 	}
 }
